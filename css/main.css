@@ -801,21 +801,29 @@ img {
 }
 
 .video-text h2 {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
-.video-intro {
-    font-size: 1.25rem;
+.video-subsection {
+    margin-bottom: 2.5rem;
+}
+
+.video-subsection h3 {
+    font-size: 1.5rem;
     color: var(--deep-blue);
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    line-height: 1.8;
+    margin-bottom: 1rem;
+    font-weight: 700;
 }
 
-.video-text p {
+.video-subsection p {
     color: var(--dark-gray);
     line-height: 1.8;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+}
+
+.video-subsection p:last-child {
+    margin-bottom: 0;
 }
 
 .video-stats {
@@ -831,13 +839,13 @@ img {
 }
 
 .stat-number {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
     background: linear-gradient(135deg, var(--primary-blue), var(--purple));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    line-height: 1;
+    line-height: 1.2;
 }
 
 .stat-label {
