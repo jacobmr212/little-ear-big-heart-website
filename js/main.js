@@ -277,9 +277,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // ================================
     // CONSOLE MESSAGE
     // ================================
-    console.log('%c📚 Little Ear, Big Heart', 'font-size: 20px; font-weight: bold; color: #4A90E2;');
+    console.log('%cLittle Ear, Big Heart', 'font-size: 20px; font-weight: bold; color: #4A90E2;');
     console.log('%cA story about being different, being brave, and being perfectly you.', 'font-size: 14px; color: #7B68EE;');
-    console.log('%c❤️ Different is awesome.', 'font-size: 12px; color: #50C9C3;');
+    console.log('%cDifferent is awesome.', 'font-size: 12px; color: #50C9C3;');
 
 });
 
