@@ -409,7 +409,7 @@ img {
     max-width: 600px;
     width: 100%;
     height: auto;
-    margin: 1.5rem auto 2rem;
+    margin: 0;
     display: block;
     animation: logoEntrance 1s ease-out, logoFloat 3s ease-in-out 1s infinite;
     filter: drop-shadow(0 10px 30px rgba(74, 144, 226, 0.15));
@@ -444,7 +444,7 @@ img {
 .hero-logo-wrapper {
     position: relative;
     display: inline-block;
-    margin: 1.5rem auto 2rem;
+    margin: 0.5rem auto 1rem;
 }
 
 .sparkle {
