@@ -228,6 +228,82 @@ img {
     display: none;
 }
 
+.language-switcher {
+    position: relative;
+}
+
+.language-switcher button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--dark-gray);
+    cursor: pointer;
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 0.5rem;
+    transition: var(--transition-fast);
+}
+
+.language-switcher button:hover {
+    color: var(--primary-blue);
+}
+
+.language-switcher svg {
+    width: 20px;
+    height: 20px;
+}
+
+.language-switcher #currentLang {
+    font-weight: 600;
+}
+
+.language-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    min-width: 150px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-normal);
+    z-index: 1000;
+    margin-top: 0.5rem;
+}
+
+.language-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.language-dropdown a {
+    display: block;
+    padding: 0.75rem 1.25rem;
+    color: var(--dark-gray);
+    text-decoration: none;
+    transition: var(--transition-fast);
+    font-weight: 500;
+}
+
+.language-dropdown a:first-child {
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.language-dropdown a:last-child {
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+.language-dropdown a:hover {
+    background: var(--sky-blue);
+    color: var(--primary-blue);
+}
+
 .mobile-menu-toggle {
     display: none;
     flex-direction: column;
@@ -268,10 +344,9 @@ img {
 }
 
 .hero-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
     position: relative;
     z-index: 1;
 }

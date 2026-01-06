@@ -6,6 +6,45 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     // ================================
+    // LANGUAGE SWITCHER
+    // ================================
+    const languageToggle = document.getElementById('languageToggle');
+    const languageDropdown = document.getElementById('languageDropdown');
+    const currentLang = document.getElementById('currentLang');
+
+    if (languageToggle && languageDropdown) {
+        languageToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            languageDropdown.classList.remove('show');
+        });
+
+        // Handle language selection
+        const languageLinks = languageDropdown.querySelectorAll('a');
+        languageLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lang = this.dataset.lang;
+                translatePage(lang);
+                currentLang.textContent = lang.toUpperCase();
+                languageDropdown.classList.remove('show');
+                localStorage.setItem('preferredLanguage', lang);
+            });
+        });
+
+        // Load saved language preference
+        const savedLang = localStorage.getItem('preferredLanguage');
+        if (savedLang && savedLang !== 'en') {
+            translatePage(savedLang);
+            currentLang.textContent = savedLang.toUpperCase();
+        }
+    }
+
+    // ================================
     // MOBILE MENU TOGGLE
     // ================================
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
@@ -309,4 +348,54 @@ function isInViewport(element) {
         rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
         rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     );
+}
+
+// ================================
+// LANGUAGE TRANSLATION
+// ================================
+function translatePage(lang) {
+    if (lang === 'en') {
+        // Reload page to reset to English
+        if (document.documentElement.lang !== 'en') {
+            location.reload();
+        }
+        return;
+    }
+
+    // Load Google Translate if not already loaded
+    if (!window.google || !window.google.translate) {
+        const script = document.createElement('script');
+        script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        document.head.appendChild(script);
+
+        window.googleTranslateElementInit = function() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'es',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element_hidden');
+
+            // Trigger translation after element is initialized
+            setTimeout(() => triggerGoogleTranslate(lang), 1000);
+        };
+
+        // Add hidden div for Google Translate
+        if (!document.getElementById('google_translate_element_hidden')) {
+            const div = document.createElement('div');
+            div.id = 'google_translate_element_hidden';
+            div.style.display = 'none';
+            document.body.appendChild(div);
+        }
+    } else {
+        triggerGoogleTranslate(lang);
+    }
+}
+
+function triggerGoogleTranslate(lang) {
+    const selectElement = document.querySelector('.goog-te-combo');
+    if (selectElement) {
+        selectElement.value = lang;
+        selectElement.dispatchEvent(new Event('change'));
+    }
 }
