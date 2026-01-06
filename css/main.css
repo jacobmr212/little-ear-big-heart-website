@@ -182,12 +182,19 @@ img {
 }
 
 .nav-brand {
-    font-size: 1.5rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--primary-blue), var(--purple));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.nav-logo {
+    height: 50px;
+    width: auto;
+    transition: var(--transition-fast);
+}
+
+.nav-logo:hover {
+    transform: scale(1.05);
 }
 
 .nav-menu {
@@ -1162,6 +1169,16 @@ img {
 .footer-section p {
     color: var(--light-gray);
     line-height: 1.8;
+}
+
+.footer-logo {
+    height: 120px;
+    width: auto;
+    margin-bottom: 1rem;
+}
+
+.footer-brand {
+    max-width: 300px;
 }
 
 .footer-section ul {
