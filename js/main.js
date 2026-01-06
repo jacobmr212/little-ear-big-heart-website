@@ -145,12 +145,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            // Here you would typically send the email to your backend
-            // For now, we'll just show the success message
+            // Submit to Formspree
+            const formData = new FormData(notifyForm);
 
-            // Simulate API call
-            submitEmail(email)
-                .then(() => {
+            fetch('https://formspree.io/f/mpqwegww', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
                     // Hide form, show success
                     notifyForm.style.display = 'none';
                     formSuccess.classList.add('show');
@@ -158,17 +164,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Store in localStorage to remember
                     localStorage.setItem('emailSubmitted', 'true');
                     localStorage.setItem('subscriberEmail', email);
-                })
-                .catch((error) => {
-                    showFormError('Something went wrong. Please try again.');
-                });
+                } else {
+                    return response.json().then(data => {
+                        if (data.errors) {
+                            showFormError(data.errors.map(error => error.message).join(', '));
+                        } else {
+                            showFormError('Something went wrong. Please try again.');
+                        }
+                    });
+                }
+            })
+            .catch((error) => {
+                showFormError('Something went wrong. Please try again.');
+            });
         });
     }
 
     // Check if user already submitted email
     if (localStorage.getItem('emailSubmitted') === 'true') {
-        notifyForm.style.display = 'none';
-        formSuccess.classList.add('show');
+        if (notifyForm) notifyForm.style.display = 'none';
+        if (formSuccess) formSuccess.classList.add('show');
     }
 
     // ================================
@@ -177,27 +192,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function isValidEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
-    }
-
-    function submitEmail(email) {
-        // Simulate API call - replace with actual endpoint
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                // Simulate success
-                console.log('Email submitted:', email);
-                resolve({ success: true });
-
-                // For actual implementation, use:
-                // fetch('YOUR_API_ENDPOINT', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify({ email: email })
-                // })
-                // .then(response => response.json())
-                // .then(data => resolve(data))
-                // .catch(error => reject(error));
-            }, 1000);
-        });
     }
 
     function showFormError(message) {
