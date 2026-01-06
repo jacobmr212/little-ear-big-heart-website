@@ -411,6 +411,95 @@ img {
     height: auto;
     margin: 1.5rem auto 2rem;
     display: block;
+    animation: logoEntrance 1s ease-out, logoFloat 3s ease-in-out 1s infinite;
+    filter: drop-shadow(0 10px 30px rgba(74, 144, 226, 0.15));
+    transition: transform 0.3s ease;
+}
+
+.hero-logo:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 15px 40px rgba(74, 144, 226, 0.25));
+}
+
+@keyframes logoEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes logoFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.hero-logo-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 1.5rem auto 2rem;
+}
+
+.sparkle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--primary-blue));
+    border-radius: 50%;
+    opacity: 0;
+    animation: sparkleFloat 3s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
+}
+
+.sparkle::before {
+    content: '✨';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+}
+
+.sparkle-1 {
+    top: 10%;
+    left: -5%;
+    animation-delay: 0s;
+}
+
+.sparkle-2 {
+    top: 15%;
+    right: -5%;
+    animation-delay: 0.7s;
+}
+
+.sparkle-3 {
+    bottom: 20%;
+    left: -3%;
+    animation-delay: 1.4s;
+}
+
+.sparkle-4 {
+    bottom: 15%;
+    right: -3%;
+    animation-delay: 2.1s;
+}
+
+@keyframes sparkleFloat {
+    0%, 100% {
+        opacity: 0;
+        transform: translateY(0) scale(0.5);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-20px) scale(1);
+    }
 }
 
 .hero h1 {
@@ -1405,6 +1494,10 @@ img {
 
     .hero-logo {
         max-width: 400px;
+    }
+
+    .sparkle {
+        font-size: 10px;
     }
 
     .hero {
