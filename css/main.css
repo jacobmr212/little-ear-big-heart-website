@@ -188,7 +188,7 @@ img {
 }
 
 .nav-logo {
-    height: 24px;
+    height: 32px;
     width: auto;
     transition: var(--transition-fast);
 }
@@ -1172,7 +1172,7 @@ img {
 }
 
 .footer-logo {
-    height: 70px;
+    height: 80px;
     width: auto;
     margin-bottom: 1rem;
 }
@@ -1286,7 +1286,7 @@ img {
     }
 
     .nav-logo {
-        height: 20px;
+        height: 26px;
     }
 
     .footer-logo {
