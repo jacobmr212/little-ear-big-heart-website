@@ -36,11 +36,14 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        // Load saved language preference
+        // Check if page is already translated and update UI
         const savedLang = localStorage.getItem('preferredLanguage');
         if (savedLang && savedLang !== 'en') {
-            translatePage(savedLang);
             currentLang.textContent = savedLang.toUpperCase();
+            // Only load Google Translate on first visit or if not already loaded
+            if (!document.body.classList.contains('translated-ltr') && !document.body.classList.contains('translated-rtl')) {
+                loadGoogleTranslate();
+            }
         }
     }
 
@@ -347,52 +350,55 @@ function isInViewport(element) {
 // ================================
 // LANGUAGE TRANSLATION
 // ================================
+let googleTranslateLoaded = false;
+
+function loadGoogleTranslate() {
+    if (googleTranslateLoaded) return;
+
+    googleTranslateLoaded = true;
+
+    // Add hidden div for Google Translate
+    if (!document.getElementById('google_translate_element')) {
+        const div = document.createElement('div');
+        div.id = 'google_translate_element';
+        div.style.display = 'none';
+        document.body.appendChild(div);
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    script.async = true;
+    document.head.appendChild(script);
+
+    window.googleTranslateElementInit = function() {
+        new window.google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'es',
+            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    };
+}
+
 function translatePage(lang) {
     if (lang === 'en') {
-        // Remove any existing Google Translate cookies and reload
+        // Remove cookies and reload once
+        localStorage.removeItem('preferredLanguage');
         document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + window.location.hostname;
-        location.reload();
+        window.location.reload();
         return;
     }
 
-    // Set Google Translate cookie directly
-    const domainCookie = 'googtrans=/en/' + lang + '; path=/; domain=.' + window.location.hostname;
-    const pathCookie = 'googtrans=/en/' + lang + '; path=/';
-    document.cookie = domainCookie;
-    document.cookie = pathCookie;
+    // Set cookie and reload once
+    const cookieValue = '/en/' + lang;
+    document.cookie = 'googtrans=' + cookieValue + '; path=/;';
+    document.cookie = 'googtrans=' + cookieValue + '; path=/; domain=.' + window.location.hostname;
 
-    // Load Google Translate if not already loaded
-    if (!window.google || !window.google.translate) {
-        const script = document.createElement('script');
-        script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-        script.async = true;
-        document.head.appendChild(script);
+    loadGoogleTranslate();
 
-        window.googleTranslateElementInit = function() {
-            new window.google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'es',
-                layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-
-            // Trigger page reload to apply translation
-            setTimeout(() => {
-                if (!document.body.classList.contains('translated-ltr')) {
-                    location.reload();
-                }
-            }, 500);
-        };
-
-        // Add hidden div for Google Translate
-        if (!document.getElementById('google_translate_element')) {
-            const div = document.createElement('div');
-            div.id = 'google_translate_element';
-            div.style.display = 'none';
-            document.body.appendChild(div);
-        }
-    } else {
-        location.reload();
-    }
+    // Reload only once
+    setTimeout(() => {
+        window.location.reload();
+    }, 100);
 }
