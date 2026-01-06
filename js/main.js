@@ -349,47 +349,50 @@ function isInViewport(element) {
 // ================================
 function translatePage(lang) {
     if (lang === 'en') {
-        // Reload page to reset to English
-        if (document.documentElement.lang !== 'en') {
-            location.reload();
-        }
+        // Remove any existing Google Translate cookies and reload
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + window.location.hostname;
+        location.reload();
         return;
     }
+
+    // Set Google Translate cookie directly
+    const domainCookie = 'googtrans=/en/' + lang + '; path=/; domain=.' + window.location.hostname;
+    const pathCookie = 'googtrans=/en/' + lang + '; path=/';
+    document.cookie = domainCookie;
+    document.cookie = pathCookie;
 
     // Load Google Translate if not already loaded
     if (!window.google || !window.google.translate) {
         const script = document.createElement('script');
-        script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        script.async = true;
         document.head.appendChild(script);
 
         window.googleTranslateElementInit = function() {
-            new google.translate.TranslateElement({
+            new window.google.translate.TranslateElement({
                 pageLanguage: 'en',
                 includedLanguages: 'es',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
                 autoDisplay: false
-            }, 'google_translate_element_hidden');
+            }, 'google_translate_element');
 
-            // Trigger translation after element is initialized
-            setTimeout(() => triggerGoogleTranslate(lang), 1000);
+            // Trigger page reload to apply translation
+            setTimeout(() => {
+                if (!document.body.classList.contains('translated-ltr')) {
+                    location.reload();
+                }
+            }, 500);
         };
 
         // Add hidden div for Google Translate
-        if (!document.getElementById('google_translate_element_hidden')) {
+        if (!document.getElementById('google_translate_element')) {
             const div = document.createElement('div');
-            div.id = 'google_translate_element_hidden';
+            div.id = 'google_translate_element';
             div.style.display = 'none';
             document.body.appendChild(div);
         }
     } else {
-        triggerGoogleTranslate(lang);
-    }
-}
-
-function triggerGoogleTranslate(lang) {
-    const selectElement = document.querySelector('.goog-te-combo');
-    if (selectElement) {
-        selectElement.value = lang;
-        selectElement.dispatchEvent(new Event('change'));
+        location.reload();
     }
 }

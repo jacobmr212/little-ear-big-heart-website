@@ -86,6 +86,21 @@ body::before {
     z-index: -1;
 }
 
+/* Hide Google Translate banner and toolbar */
+body {
+    top: 0 !important;
+}
+
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+.skiptranslate iframe {
+    display: none !important;
+}
+
+#google_translate_element {
+    display: none !important;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
